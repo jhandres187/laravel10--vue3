@@ -22,7 +22,6 @@ class UserController extends Controller
             
             return response()->json(['token' => $token]);
         }
-
         return response()->json(['message' => 'Usuario y Contraseña inválidos'], 401);
     }
 

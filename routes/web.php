@@ -40,7 +40,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'admin']],functi
     ]);
 });
 
-route::get('/vue', function(){
+route::get('/vue/{r1?}/{r2?}', function(){
     return view ('vue');
 });
 

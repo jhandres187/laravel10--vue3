@@ -41,7 +41,7 @@ class PutRequest extends FormRequest
         // return $this->myRules();
         return [
             'title' => 'required|min:5|max:500',
-            'slug' => 'required|min:5|max:500|unique:posts,slug,'.$this->route("post")->id,
+            'slug' => 'min:5|max:500|unique:posts,slug,'.$this->route("post")->id,
             'content' => 'required|min:10|max:500',
             'category_id' => 'required|integer',
             'description' => 'required|min:10|max:500',

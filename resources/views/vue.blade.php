@@ -8,7 +8,9 @@
     
     @vite(['resources/js/vue/main.js'])
 </head>
-<body>
-    <div id="app"></div>
+<body class=" py-24">
+    <main class="container mx-auto flex justify-center items-center max-h-screen h-full">
+        <div id="app" class="max-w-7xl w-full mx-auto rounded-lg shadow-lg shadow-gray-300 p-4"></div>
+    </main>
 </body>
 </html>

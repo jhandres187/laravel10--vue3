@@ -16,9 +16,12 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@mdi/font": "^7.3.67",
         "@oruga-ui/oruga-next": "^0.7.0",
         "@vitejs/plugin-vue": "^4.4.0",
+        "node-sass": "^9.0.0",
         "vue": "^3.2.36",
-        "vue-loader": "^17.3.0"
+        "vue-loader": "^17.3.0",
+        "vue-router": "^4.2.5"
     }
 }

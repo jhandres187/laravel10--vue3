@@ -1,13 +1,5 @@
 <template>
     <div>
-        <List />
+        <router-view></router-view>
     </div>
 </template>
-<script>
-import List from './components/List.vue'
-export default {
-    components: {
-        List
-    }
-}
-</script>
