@@ -118,9 +118,7 @@ export default {
             this.errors.category_id = ""
         },
         submit(){
-
             this.clearErrorsForm();
-
             if(this.post == ""){
                 return this.$axios.post(
                             "/api/post", 
