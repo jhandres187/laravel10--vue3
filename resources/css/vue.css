@@ -5,3 +5,6 @@
 h1{
     @apply text-center text-2xl text-gray-900
 }
+.o-field__message{
+    @apply text-red-600
+} 

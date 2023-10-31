@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::resource('category', CategoryController::class)->except(['create', 'edit']);
     Route::resource('post', PostController::class)->except(["create", "edit"]);
     Route::post('user/logout', [UserController::class, 'logout']);
+    Route::post('post/upload/{post}', [PostController::class, 'upload']);
 });
 
 
