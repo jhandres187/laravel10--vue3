@@ -19,15 +19,14 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('myapptoken')->plainTextToken;
-            
+            session()->put('token', $token);
             return response()->json(['token' => $token]);
         }
         return response()->json(['message' => 'Usuario y Contraseña inválidos'], 401);
     }
 
-    public function logout(Request $request) {
-        $request->user()->tokens()->delete();
-
-        return response()->json(['message' => 'Sesión cerrada exitosamente']);
+    public function logout() {
+        session()->flush();
+        return response()->json('Sesión cerrada exitosamente', 200);
     }
 }

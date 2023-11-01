@@ -67,43 +67,26 @@ export default{
             deletePostRow:""
         }
     },
-    async mounted(){
+    mounted(){
         this.listPage()
     },
     methods: {
         updatePage(){
             setTimeout(this.listPage, 100);
         },
-        async listPage(){
-            const email = 'jhandres187@gmail.com';
-            const password = 'Luceand21';
-            try {
-                this.loading = true;
-                // Realizar la solicitud para obtener el token
-                const tokenResponse = await this.$axios.post('/api/user/login', {
-                    email: email,
-                    password: password,
-                });
-                // Almacenar el token en una variable
-                const token = tokenResponse.data.token;
-                // // Realizar la solicitud para obtener todos los posts utilizando el token
-                const postsResponse = await this.$axios.get('/api/post?page='+this.currentPage, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                //Almacenar los posts en una variable
-                this.posts = postsResponse.data
-                this.loading = false
-                //Realizar la solicitud para cerrar la sesión
-                await this.$axios.post('/api/user/logout', {}, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-            } catch (error) {
-                console.error('Ocurrió un error:', error);
+        listPage(){
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${this.$root.token}`
+                }
             }
+            this.loading = true;
+            const postsResponse = this.$axios.get('/api/post?page='+this.currentPage, config).then((res) => {
+                console.log(res.data.data)
+                //Almacenar los posts en una variable
+                this.posts = res.data
+                this.loading = false
+            });
         },
         deletePost(){
             console.log(this.deletePostRow)
