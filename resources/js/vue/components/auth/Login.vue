@@ -39,8 +39,8 @@ export default {
         submit(){
             this.cleanErrorsForm();
             this.$axios.post('/api/user/login', this.form).then((res) => {
-                console.log(res.data.token)
                 setTimeout(() => {window.location.href = "/vue"}, 1500);
+                this.$root.setCookiesAuth(res.data);
                 this.$oruga.notification.open({
                     message: 'Login Exitoso',
                     position: 'top-right',

@@ -82,16 +82,19 @@ export default{
             }
             this.loading = true;
             const postsResponse = this.$axios.get('/api/post?page='+this.currentPage, config).then((res) => {
-                console.log(res.data.data)
                 //Almacenar los posts en una variable
                 this.posts = res.data
                 this.loading = false
             });
         },
         deletePost(){
-            console.log(this.deletePostRow)
             this.posts.data.splice(this.deletePostRow.index,1);
-            this.$axios.delete("/api/post/"+this.deletePostRow.row.id);
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${this.$root.token}`
+                }
+            }
+            this.$axios.delete("/api/post/"+this.deletePostRow.row.id, config);
             this.confirmDeleteActive = false;
             this.$oruga.notification.open({
                 message: 'Registro Eliminado',

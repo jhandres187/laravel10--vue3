@@ -38,3 +38,4 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 //Usuarios
 Route::post('user/login', [UserController::class, 'login']);
 Route::post('user/logout', [UserController::class, 'logout']);
+Route::post('user/token-check', [UserController::class, 'checkToken']);

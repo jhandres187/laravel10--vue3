@@ -22,6 +22,7 @@
         "node-sass": "^9.0.0",
         "vue": "^3.2.36",
         "vue-loader": "^17.3.0",
-        "vue-router": "^4.2.5"
+        "vue-router": "^4.2.5",
+        "vue3-cookies": "^1.0.6"
     }
 }

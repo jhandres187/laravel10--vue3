@@ -29,11 +29,11 @@
                     <option value="not">No</option>
                 </o-select>
             </o-field>
-            <o-field class="file w-full" :message="fileErrors">
-                <figure v-if="post" class="mr-2">
+            <o-field v-if="post" class="file w-full" :message="fileErrors">
+                <figure class="mr-2">
                     <img :src="'/image/otro/'+this.imagePosted" :alt="post.title" class="w-20">
                 </figure>
-                <div class="w-full flex gap-2" v-if="post">
+                <div class="w-full flex gap-2">
                     <o-upload v-model="file">
                         <o-button tag="a" variant="primary">
                             <o-icon icon="upload" />
@@ -43,10 +43,10 @@
                     <span v-if="file" class="file-name">
                         {{ file.name }}
                     </span>
-                    <o-button iconLeft="upload" @click="upload()">Subir</o-button>
+                    <o-button v-if="fileButtonActive" iconLeft="upload" @click="upload()">Subir</o-button>
                 </div>
             </o-field>
-            <div>
+            <div v-if="post">
                 <o-field :message="fileErrors">
                     <o-upload v-model="dropFiles" multiple drag-drop>
                         <section class="ex-center">
@@ -100,6 +100,7 @@ export default {
             fileErrors: "",
             dropFiles: null,
             imagePosted: null,
+            fileButtonActive: false
         };
     },
     async mounted(){
@@ -119,10 +120,16 @@ export default {
         },
         submit(){
             this.clearErrorsForm();
-            if(this.post == ""){
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${this.$root.token}`
+                }
+            }
+            if(this.post == ""){ 
                 return this.$axios.post(
                             "/api/post", 
-                            this.form
+                            this.form,
+                            config
                         ).then(res => {
                             this.$oruga.notification.open({
                                 message: 'Registro Creado Correctamente',
@@ -138,7 +145,8 @@ export default {
             //actualizar
             this.$axios.patch(
                 "/api/post/"+this.post.id, 
-                this.form
+                this.form,
+                config
                 ).then(res => {
                     this.$oruga.notification.open({
                         message: 'Registro Actualizado Correctamente',
@@ -156,9 +164,15 @@ export default {
             this.fileErrors = ""
             const formData = new FormData()
             formData.append("image", this.file)
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${this.$root.token}`
+                }
+            }
             this.$axios.post("/api/post/upload/"+this.post.id,formData,{
                 headers:{
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${this.$root.token}`
                 }
             }).then(res => {
                 this.imagePosted = res.data.image;
@@ -170,6 +184,7 @@ export default {
                     closable: true
                 });
                 this.file = null
+                this.fileButtonActive=false;
                 console.log(res);
             }).catch(error => {
                 this.fileErrors = error.response.data.message;
@@ -179,11 +194,21 @@ export default {
             return this.dropFiles.splice(i,1)
         },
         async getPost(){
-            this.post = await this.$axios.get("/api/post/slug/"+this.$route.params.slug);
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${this.$root.token}`
+                }
+            }
+            this.post = await this.$axios.get("/api/post/slug/"+this.$route.params.slug, config);
             this.post = this.post.data
         },
         getCategory(){
-            this.$axios.get("/api/category/all").then(response => {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${this.$root.token}`
+                }
+            }
+            this.$axios.get("/api/category/all", config).then(response => {
                 this.categories = response.data
             })
         },
@@ -216,7 +241,8 @@ export default {
                     formData.append("image", neww[neww.length - 1])
                     this.$axios.post("/api/post/upload/"+this.post.id,formData,{
                         headers:{
-                            "Content-Type": "multipart/form-data"
+                            "Content-Type": "multipart/form-data",
+                            Authorization: `Bearer ${this.$root.token}`
                         }
                     }).then(res => {
                         this.imagePosted = res.data.image;
@@ -234,6 +260,9 @@ export default {
                 }
             },
             deep: true
+        },
+        file(newFile,oldFile){
+            (newFile != null) ? this.fileButtonActive = true: this.fileButtonActive = false;
         }
     }
 }
