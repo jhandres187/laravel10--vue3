@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\PutRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -16,16 +18,21 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $allPost = Post::with('category')->paginate(3);
         return response()->json($allPost, 200);
     }
 
-    public function all()
+    public function all(): JsonResponse
     {
-        $allPost = Post::with('category')->get();
-        return response()->json($allPost, 200);
+        // if(Cache::has('post_all')){
+            // return response()->json(Cache::get('post_all'));
+        // }else{
+            $allPosts = Post::with('category')->get();
+            // Cache::put('post_all', $allPosts);
+            return response()->json($allPosts, 200);
+        // }
     }
 
     // public function slug($slug)
@@ -38,7 +45,7 @@ class PostController extends Controller
     //     ->firstOrFail();
     //     return response()->json($post, 200);
     // }
-    public function slug(Post $post)
+    public function slug(Post $post): JsonResponse
     {
         $post->category;
         return response()->json($post, 200);
@@ -50,7 +57,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): JsonResponse
     {
         return response()->json(Post::create($request->validated()));
     }
@@ -61,7 +68,7 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Post $post): JsonResponse
     {
         return response()->json($post, 200);
     }
@@ -73,13 +80,14 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PutRequest $request, Post $post)
+    public function update(PutRequest $request, Post $post): JsonResponse
     {
         $post->update($request->validated());
         return response()->json($post);
     }
 
-    public function upload(Request $request, Post $post){
+    public function upload(Request $request, Post $post): JsonResponse
+    {
         $request->validate([
             'image' => 'required|mimes:jpeg,jpg,png|max:10240'
         ]);
@@ -99,7 +107,7 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Post $post): JsonResponse
     {
         $post->delete();
         return response()->json("Post Eliminado correctamente");

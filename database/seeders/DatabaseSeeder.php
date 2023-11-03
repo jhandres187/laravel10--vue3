@@ -32,6 +32,6 @@ class DatabaseSeeder extends Seeder
             'rol' => 'regular'
         ]);
         Category::factory(4)->create();
-        Post::factory(30)->create();
+        Post::factory(10000)->create();
     }
 }
